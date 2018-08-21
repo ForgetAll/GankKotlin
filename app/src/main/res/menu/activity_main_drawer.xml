@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/welfareIt"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="福利" />
+        <item
+            android:id="@+id/timeBroswerIt"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="时间浏览" />
+        <item
+            android:id="@+id/typeBroswerIt"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="分类浏览" />
+        <item
+            android:id="@+id/starIt"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="收藏" />
+    </group>
+
+    <item android:title="关于">
+        <menu>
+            <item
+                android:id="@+id/aboutMeIt"
+                android:icon="@drawable/ic_menu_share"
+                android:title="关于我" />
+        </menu>
+    </item>
+
+</menu>
