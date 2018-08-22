@@ -4,7 +4,12 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.view.MenuItem
 import com.xiasuhuei321.gankkotlin.base.BaseActivity
+import com.xiasuhuei321.gankkotlin.base.BaseFragment
+import com.xiasuhuei321.gankkotlin.base.Presenter
+import com.xiasuhuei321.gankkotlin.base.View
+import com.xiasuhuei321.gankkotlin.modules.infobrowser.DateInfoFragment
 import com.xiasuhuei321.gankkotlin.network.asyncUI
 import com.xiasuhuei321.gankkotlin.network.gankService
 import com.xiasuhuei321.gankkotlin.util.XLog
@@ -16,8 +21,10 @@ import kotlinx.android.synthetic.main.layout_toobar.*
  * author:luo
  * e-mail:xiasuhuei321@163.com
  */
-class MainActivity : BaseActivity() {
-    val TAG = "MainActivity"
+class MainActivity : BaseActivity(), MainView {
+    private val TAG = "MainActivity"
+    private lateinit var presenter: MainPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,7 +46,7 @@ class MainActivity : BaseActivity() {
 
         asyncUI {
             val res = gankService { getHistory() }.await().body()
-            if (res.isSuccess()) res.result?.forEach {
+            if (res.isSuccess()) res.results?.forEach {
                 XLog.i(TAG, it)
             }
         }
@@ -51,33 +58,69 @@ class MainActivity : BaseActivity() {
         }
 
         menuNv.setNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.welfareIt -> {
-                    XLog.i(TAG, "welfareIt")
-                }
-
-                R.id.timeBroswerIt -> {
-
-                }
-
-                R.id.typeBroswerIt -> {
-
-                }
-
-                R.id.starIt -> {
-
-                }
-
-                R.id.aboutMeIt -> {
-
-                }
-
-                else -> {
-                }
-            }
-
-            drawer_layout.closeDrawer(GravityCompat.START)
+            presenter.drawerClick(item)
             true
         }
     }
+
+    override fun initPresenter() {
+        presenter = MainPresenter(this)
+    }
+
+    override fun getPresenter(): Presenter? {
+        return presenter
+    }
+
+    override fun closeDrawer() {
+        drawer_layout.closeDrawer(GravityCompat.START)
+    }
+
+    override fun addFragment(fragment: BaseFragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.contentFl, fragment, "DateInfoFragment")
+        transaction.show(fragment)
+        transaction.commit()
+    }
+}
+
+class MainPresenter(var view: MainView?) : Presenter {
+
+    fun drawerClick(item: MenuItem) {
+        when (item.itemId) {
+            R.id.welfareIt -> {
+            }
+
+            R.id.timeBroswerIt -> {
+                view?.addFragment(DateInfoFragment())
+            }
+
+            R.id.typeBroswerIt -> {
+
+            }
+
+            R.id.starIt -> {
+
+            }
+
+            R.id.aboutMeIt -> {
+
+            }
+
+            else -> {
+            }
+        }
+
+        view?.closeDrawer()
+    }
+
+    override fun release() {
+        view = null
+    }
+
+}
+
+interface MainView : View {
+    fun closeDrawer()
+
+    fun addFragment(fragment: BaseFragment)
 }

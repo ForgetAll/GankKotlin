@@ -1,6 +1,7 @@
 package com.xiasuhuei321.gankkotlin.network
 
 import com.xiasuhuei321.gankkotlin.base.BaseActivity
+import com.xiasuhuei321.gankkotlin.base.BaseFragment
 import com.xiasuhuei321.gankkotlin.data.GankData
 import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.CoroutineStart
@@ -35,6 +36,17 @@ fun <T> asyncUI(
 }
 
 inline fun <reified T> BaseActivity.gankService(crossinline request: GankService.() -> Call<GankData<T>>) = bg<Response<GankData<T>>> {
+    val call = request(GankService)
+    try {
+        val res = call.execute()
+        return@bg res
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return@bg Response.error(1001, ResponseBody.create(null, "error"))
+    }
+}
+
+inline fun <reified T> BaseFragment.gankService(crossinline request: GankService.() -> Call<GankData<T>>) = bg<Response<GankData<T>>> {
     val call = request(GankService)
     try {
         val res = call.execute()

@@ -9,21 +9,31 @@ import android.view.WindowManager
  * author:luo
  * e-mail:xiasuhuei321@163.com
  */
-open class BaseActivity : AppCompatActivity(){
+open class BaseActivity : AppCompatActivity() {
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
         initStatusBar()
         initView()
         initEvent()
+        initPresenter()
     }
 
-    protected fun initStatusBar(){
+    private fun initStatusBar() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = Color.parseColor("#4aa5e2")
     }
 
-    protected open fun initView() = Unit
+    open fun getPresenter(): Presenter? = null
 
-    protected open fun initEvent() = Unit
+    override fun onDestroy() {
+        getPresenter()?.release()
+        super.onDestroy()
+    }
+
+    open fun initView() = Unit
+
+    open fun initEvent() = Unit
+
+    open fun initPresenter() = Unit
 }

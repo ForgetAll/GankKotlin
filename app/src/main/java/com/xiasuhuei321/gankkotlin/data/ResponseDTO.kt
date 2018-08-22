@@ -5,6 +5,6 @@ package com.xiasuhuei321.gankkotlin.data
  * author:luo
  * e-mail:xiasuhuei321@163.com
  */
-data class GankData<T>(private val error: Boolean, var result: T? = null) {
+data class GankData<T>(private val error: Boolean, var results: T? = null) {
     fun isSuccess() = !error
 }

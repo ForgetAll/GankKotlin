@@ -41,8 +41,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     implementation 'com.squareup.okhttp3:okhttp:3.4.1'
-
-    implementation 'com.github.Aspsine:SwipeToLoadLayout:1.0.4'
 }
 
 configurations.all {
