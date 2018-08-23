@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.xiasuhuei321.gankkotlin.R
 import com.xiasuhuei321.gankkotlin.base.BaseFragment
+import com.xiasuhuei321.gankkotlin.base.Presenter
+import com.xiasuhuei321.gankkotlin.network.GankService
 import com.xiasuhuei321.gankkotlin.network.asyncUI
 import com.xiasuhuei321.gankkotlin.network.gankService
 import com.xiasuhuei321.gankkotlin.util.XLog
@@ -19,11 +21,19 @@ import kotlinx.android.synthetic.main.fragment_dateinfo.*
  * author:luo
  * e-mail:xiasuhuei321@163.com
  */
-class DateInfoFragment : BaseFragment() {
-    val TAG = "DateInfoFragment"
-    val adapter = DateAdapter()
+class DateInfoFragment : BaseFragment(), DateInfoView {
+    companion object {
+        val TAG = "DateInfoFragment"
+    }
+    private val adapter = DateAdapter()
+    private val presenter = DateInfoPresenter(this)
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater?.inflate(R.layout.fragment_dateinfo, null)
+    }
+
+    override fun getPresenter(): Presenter? {
+        return presenter
     }
 
     override fun initView() {
@@ -33,12 +43,17 @@ class DateInfoFragment : BaseFragment() {
     }
 
     override fun initEvent() {
-        asyncUI {
-            val res = gankService { getHistory() }.await().body()
-            if (res.isSuccess()) {
-                adapter.setData(res.results)
-            }
-        }
+        refreshLayout.setOnRefreshListener { presenter.refresh() }
+        refreshLayout.isRefreshing = true
+        presenter.refresh()
+    }
+
+    override fun setData(data: List<String>?) {
+        adapter.setData(data)
+    }
+
+    override fun closeRefresh() {
+        refreshLayout.isRefreshing = false
     }
 }
 
@@ -75,4 +90,30 @@ class DateHolder : RecyclerView.ViewHolder {
     constructor(itemView: View) : super(itemView) {
         dateTv = itemView.findViewById(R.id.dateTv)
     }
+}
+
+class DateInfoPresenter(var view: DateInfoView?) : Presenter {
+
+    private fun getHistoryData() = asyncUI {
+        val res = gankService { GankService.getHistory() }.await().body()
+        if (res.isSuccess()) {
+            view?.setData(res.results)
+        }
+        view?.closeRefresh()
+    }
+
+    fun refresh() {
+        getHistoryData()
+    }
+
+    override fun release() {
+        view = null
+    }
+
+}
+
+interface DateInfoView : com.xiasuhuei321.gankkotlin.base.View {
+    fun setData(data: List<String>?)
+
+    fun closeRefresh()
 }

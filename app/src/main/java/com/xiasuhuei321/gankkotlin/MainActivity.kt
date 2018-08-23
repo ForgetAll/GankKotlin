@@ -10,9 +10,6 @@ import com.xiasuhuei321.gankkotlin.base.BaseFragment
 import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.base.View
 import com.xiasuhuei321.gankkotlin.modules.infobrowser.DateInfoFragment
-import com.xiasuhuei321.gankkotlin.network.asyncUI
-import com.xiasuhuei321.gankkotlin.network.gankService
-import com.xiasuhuei321.gankkotlin.util.XLog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toobar.*
 
@@ -43,13 +40,6 @@ class MainActivity : BaseActivity(), MainView {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         drawerToggle.syncState()
-
-        asyncUI {
-            val res = gankService { getHistory() }.await().body()
-            if (res.isSuccess()) res.results?.forEach {
-                XLog.i(TAG, it)
-            }
-        }
     }
 
     override fun initEvent() {
@@ -75,15 +65,16 @@ class MainActivity : BaseActivity(), MainView {
         drawer_layout.closeDrawer(GravityCompat.START)
     }
 
-    override fun addFragment(fragment: BaseFragment) {
+    override fun addFragment(fragment: BaseFragment, tag: String) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.contentFl, fragment, "DateInfoFragment")
+        transaction.add(R.id.contentFl, fragment, tag)
         transaction.show(fragment)
         transaction.commit()
     }
 }
 
 class MainPresenter(var view: MainView?) : Presenter {
+    private val fragmentMap = HashMap<String, BaseFragment>()
 
     fun drawerClick(item: MenuItem) {
         when (item.itemId) {
@@ -91,7 +82,7 @@ class MainPresenter(var view: MainView?) : Presenter {
             }
 
             R.id.timeBroswerIt -> {
-                view?.addFragment(DateInfoFragment())
+                addFragment(DateInfoFragment.TAG)
             }
 
             R.id.typeBroswerIt -> {
@@ -117,10 +108,26 @@ class MainPresenter(var view: MainView?) : Presenter {
         view = null
     }
 
+    private fun getFragment(tag: String): BaseFragment {
+        var fragment = fragmentMap[DateInfoFragment.TAG]
+        if (fragment == null) {
+            when (tag) {
+                DateInfoFragment.TAG ->
+                    fragment = DateInfoFragment()
+            }
+        }
+
+        return fragment!!
+    }
+
+    private fun addFragment(tag: String) {
+        view?.addFragment(getFragment(tag), tag)
+    }
+
 }
 
 interface MainView : View {
     fun closeDrawer()
 
-    fun addFragment(fragment: BaseFragment)
+    fun addFragment(fragment: BaseFragment, tag: String)
 }

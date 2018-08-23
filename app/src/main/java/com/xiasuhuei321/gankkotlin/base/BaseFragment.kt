@@ -9,7 +9,10 @@ import android.view.View
  * author:luo
  * e-mail:xiasuhuei321@163.com
  */
-open class BaseFragment : Fragment(){
+open class BaseFragment : Fragment() {
+    companion object {
+        val TAG = "BaseFragment"
+    }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -20,4 +23,11 @@ open class BaseFragment : Fragment(){
     protected open fun initView() = Unit
 
     protected open fun initEvent() = Unit
+
+    protected open fun getPresenter(): Presenter? = null
+
+    override fun onDestroy() {
+        getPresenter()?.release()
+        super.onDestroy()
+    }
 }
