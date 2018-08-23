@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.xiasuhuei321.gankkotlin.R
 import com.xiasuhuei321.gankkotlin.base.BaseFragment
@@ -50,7 +51,6 @@ class DateInfoFragment : BaseFragment(), DateInfoView {
     }
 
     override fun setData(data: List<String>?) {
-        XLog.i(TAG, "???")
         adapter.setData(data)
     }
 
@@ -63,7 +63,6 @@ class DateAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var data: List<String> = ArrayList()
 
     fun setData(data: List<String>?) {
-        XLog.i("DateAdapter", "???")
         data?.let {
             this.data = data
             notifyDataSetChanged()
@@ -83,15 +82,23 @@ class DateAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val h = holder as DateHolder
         if (position >= data.size) return
         h.dateTv.text = data[position]
+        h.itemClick = { index ->
+        }
     }
 
 }
 
 class DateHolder : RecyclerView.ViewHolder {
     val dateTv: TextView
+    private val root: RelativeLayout
+    var itemClick: (Int) -> Unit = {}
 
     constructor(itemView: View) : super(itemView) {
         dateTv = itemView.findViewById(R.id.dateTv)
+        root = itemView.findViewById(R.id.rootRl)
+        root.setOnClickListener {
+            itemClick.invoke(layoutPosition)
+        }
     }
 }
 
@@ -100,8 +107,6 @@ class DateInfoPresenter(var view: DateInfoView?) : Presenter {
     private fun getHistoryData() = asyncUI {
         val res = gankService { GankService.getHistory() }.await().body()
         if (res.isSuccess()) {
-            XLog.i("DateInfoPresenter", "success")
-            if (view == null) XLog.i("DateInfoPresenter", "fuck!!")
             view?.setData(res.results)
         }
         view?.closeRefresh()
