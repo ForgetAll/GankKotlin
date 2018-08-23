@@ -11,7 +11,11 @@ import com.xiasuhuei321.gankkotlin.base.BaseFragment
  * author:luo
  * e-mail:xiasuhuei321@163.com
  */
-class GirlsFragment : BaseFragment(){
+class WelfareFragment : BaseFragment() {
+    companion object {
+        val TAG = "WelfareFragment"
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
     }

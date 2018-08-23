@@ -2,6 +2,9 @@ package com.xiasuhuei321.gankkotlin
 
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
@@ -9,6 +12,7 @@ import com.xiasuhuei321.gankkotlin.base.BaseActivity
 import com.xiasuhuei321.gankkotlin.base.BaseFragment
 import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.base.View
+import com.xiasuhuei321.gankkotlin.modules.girls.WelfareFragment
 import com.xiasuhuei321.gankkotlin.modules.infobrowser.DateInfoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toobar.*
@@ -65,11 +69,15 @@ class MainActivity : BaseActivity(), MainView {
         drawer_layout.closeDrawer(GravityCompat.START)
     }
 
-    override fun addFragment(fragment: BaseFragment, tag: String) {
+    override fun showFragment(fragment: Fragment, tag: String) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.contentFl, fragment, tag)
         transaction.show(fragment)
         transaction.commit()
+    }
+
+    override fun getSupportManager(): FragmentManager {
+        return supportFragmentManager
     }
 }
 
@@ -79,6 +87,7 @@ class MainPresenter(var view: MainView?) : Presenter {
     fun drawerClick(item: MenuItem) {
         when (item.itemId) {
             R.id.welfareIt -> {
+                addFragment(WelfareFragment.TAG)
             }
 
             R.id.timeBroswerIt -> {
@@ -112,8 +121,14 @@ class MainPresenter(var view: MainView?) : Presenter {
         var fragment = fragmentMap[DateInfoFragment.TAG]
         if (fragment == null) {
             when (tag) {
-                DateInfoFragment.TAG ->
+                DateInfoFragment.TAG -> {
                     fragment = DateInfoFragment()
+                    fragmentMap[DateInfoFragment.TAG] = fragment
+                }
+                WelfareFragment.TAG -> {
+                    fragment = WelfareFragment()
+                    fragmentMap[WelfareFragment.TAG] = fragment
+                }
             }
         }
 
@@ -121,7 +136,27 @@ class MainPresenter(var view: MainView?) : Presenter {
     }
 
     private fun addFragment(tag: String) {
-        view?.addFragment(getFragment(tag), tag)
+        view?.let {
+            val manager = it.getSupportManager()
+            var fragment = manager.findFragmentByTag(tag)
+
+            if (fragment == null) {
+                fragment = getFragment(tag)
+                manager.beginTransaction().apply {
+                    hideAll(this)
+                }.commit()
+
+                it.showFragment(fragment, tag)
+            } else {
+                manager.beginTransaction().show(fragment)
+            }
+        }
+    }
+
+    private fun hideAll(transaction: FragmentTransaction) {
+        for (pair in fragmentMap) {
+            transaction.hide(pair.value)
+        }
     }
 
 }
@@ -129,5 +164,7 @@ class MainPresenter(var view: MainView?) : Presenter {
 interface MainView : View {
     fun closeDrawer()
 
-    fun addFragment(fragment: BaseFragment, tag: String)
+    fun showFragment(fragment: Fragment, tag: String)
+
+    fun getSupportManager(): FragmentManager
 }

@@ -25,6 +25,7 @@ class DateInfoFragment : BaseFragment(), DateInfoView {
     companion object {
         val TAG = "DateInfoFragment"
     }
+
     private val adapter = DateAdapter()
     private val presenter = DateInfoPresenter(this)
 
@@ -49,6 +50,7 @@ class DateInfoFragment : BaseFragment(), DateInfoView {
     }
 
     override fun setData(data: List<String>?) {
+        XLog.i(TAG, "???")
         adapter.setData(data)
     }
 
@@ -61,6 +63,7 @@ class DateAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var data: List<String> = ArrayList()
 
     fun setData(data: List<String>?) {
+        XLog.i("DateAdapter", "???")
         data?.let {
             this.data = data
             notifyDataSetChanged()
@@ -97,6 +100,8 @@ class DateInfoPresenter(var view: DateInfoView?) : Presenter {
     private fun getHistoryData() = asyncUI {
         val res = gankService { GankService.getHistory() }.await().body()
         if (res.isSuccess()) {
+            XLog.i("DateInfoPresenter", "success")
+            if (view == null) XLog.i("DateInfoPresenter", "fuck!!")
             view?.setData(res.results)
         }
         view?.closeRefresh()
