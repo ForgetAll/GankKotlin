@@ -55,6 +55,9 @@ class MainActivity : BaseActivity(), MainView {
             presenter.drawerClick(item)
             true
         }
+
+        menuNv.menu.getItem(0).isCheckable = true
+//        presenter.addFragment(WelfareFragment.TAG)
     }
 
     override fun initPresenter() {
@@ -72,13 +75,14 @@ class MainActivity : BaseActivity(), MainView {
     override fun showFragment(fragment: Fragment, tag: String) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.contentFl, fragment, tag)
-        transaction.show(fragment)
         transaction.commit()
     }
 
     override fun getSupportManager(): FragmentManager {
         return supportFragmentManager
     }
+
+    override fun getContentId() = R.id.contentFl
 }
 
 class MainPresenter(var view: MainView?) : Presenter {
@@ -135,20 +139,20 @@ class MainPresenter(var view: MainView?) : Presenter {
         return fragment!!
     }
 
-    private fun addFragment(tag: String) {
+    fun addFragment(tag: String) {
         view?.let {
             val manager = it.getSupportManager()
             var fragment = manager.findFragmentByTag(tag)
 
+            hideAll(manager.beginTransaction())
             if (fragment == null) {
                 fragment = getFragment(tag)
                 manager.beginTransaction().apply {
-                    hideAll(this)
+                    add(it.getContentId(), fragment, tag)
                 }.commit()
-
-                it.showFragment(fragment, tag)
             } else {
-                manager.beginTransaction().show(fragment)
+                val transaction = manager.beginTransaction()
+                transaction.show(fragment).commit()
             }
         }
     }
@@ -157,6 +161,7 @@ class MainPresenter(var view: MainView?) : Presenter {
         for (pair in fragmentMap) {
             transaction.hide(pair.value)
         }
+        transaction.commit()
     }
 
 }
@@ -167,4 +172,6 @@ interface MainView : View {
     fun showFragment(fragment: Fragment, tag: String)
 
     fun getSupportManager(): FragmentManager
+
+    fun getContentId(): Int
 }

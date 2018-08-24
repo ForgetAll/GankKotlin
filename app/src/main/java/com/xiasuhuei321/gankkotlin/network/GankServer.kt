@@ -13,7 +13,18 @@ import java.util.concurrent.TimeUnit
  * author:luo
  * e-mail:xiasuhuei321@163.com
  */
-object GankService : ApiService by GankServer.service
+object GankService : ApiService by GankServer.service {
+    var welfarePageIndex = 0
+
+    fun getWelfare(pageIndex: Int = -1, count: Int = 10) = getData("福利", count.toString(), if (pageIndex == -1) {
+        this.welfarePageIndex++
+        this.welfarePageIndex.toString()
+    } else {
+        this.welfarePageIndex = pageIndex
+        pageIndex.toString()
+    })
+
+}
 
 object GankServer {
     private val DEFAULT_TIMEOUT = 45

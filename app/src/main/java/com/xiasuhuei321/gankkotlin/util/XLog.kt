@@ -12,7 +12,7 @@ import java.util.*
 object XLog {
     private val MIN_STACK_OFFSET = 3
 
-    var defaultTag = "Remeet"
+    var defaultTag = "Gankio"
     private val lineSeparator = System.getProperty("line.separator", "/n")
 
     val V = Log.VERBOSE

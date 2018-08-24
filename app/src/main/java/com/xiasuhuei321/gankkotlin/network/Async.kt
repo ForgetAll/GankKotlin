@@ -1,5 +1,6 @@
 package com.xiasuhuei321.gankkotlin.network
 
+import android.content.Context
 import com.xiasuhuei321.gankkotlin.base.BaseActivity
 import com.xiasuhuei321.gankkotlin.data.GankData
 import kotlinx.coroutines.experimental.CoroutineScope
@@ -45,7 +46,7 @@ inline fun <reified T> BaseActivity.gankService(crossinline request: GankService
     }
 }
 
-inline fun <reified T> gankService(crossinline request: GankService.() -> Call<GankData<T>>) = bg<Response<GankData<T>>> {
+inline fun <reified T> gankService(context: Context? = null, crossinline request: GankService.() -> Call<GankData<T>>) = bg<Response<GankData<T>>> {
     val call = request(GankService)
     try {
         val res = call.execute()
