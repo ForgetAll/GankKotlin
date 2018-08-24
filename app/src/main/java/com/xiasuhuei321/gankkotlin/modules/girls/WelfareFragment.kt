@@ -56,7 +56,6 @@ class WelfareFragment : BaseFragment(), WelfareView {
             if (!refreshLayout.isRefreshing)
                 presenter.refresh()
         }
-
     }
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
