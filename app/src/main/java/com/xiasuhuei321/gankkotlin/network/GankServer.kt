@@ -1,9 +1,12 @@
 package com.xiasuhuei321.gankkotlin.network
 
 import com.google.gson.GsonBuilder
+import com.xiasuhuei321.gankkotlin.data.Daily
+import com.xiasuhuei321.gankkotlin.data.GankData
 import com.xiasuhuei321.gankkotlin.util.XLog
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -24,6 +27,13 @@ object GankService : ApiService by GankServer.service {
         pageIndex.toString()
     })
 
+    /**
+     * 时间格式 2018-08-01
+     */
+    fun getDaily(time: String): Call<GankData<Daily>> {
+        val timestr = time.split("-")
+        return getDaily(timestr[0], timestr[1], timestr[2])
+    }
 }
 
 object GankServer {

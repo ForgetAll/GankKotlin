@@ -16,6 +16,7 @@ import com.xiasuhuei321.gankkotlin.modules.girls.WelfareFragment
 import com.xiasuhuei321.gankkotlin.modules.infobrowser.DateInfoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toobar.*
+import org.jetbrains.anko.startActivity
 
 /**
  * Created by xiasuhuei321 on 2018/8/16.
@@ -29,6 +30,7 @@ class MainActivity : BaseActivity(), MainView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        startActivity<TestActivity>()
     }
 
     override fun initView() {

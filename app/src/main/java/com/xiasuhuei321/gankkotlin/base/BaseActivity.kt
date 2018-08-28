@@ -13,6 +13,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun setContentView(layoutResID: Int) {
         super.setContentView(layoutResID)
+        beforeInit()
         initStatusBar()
         initView()
         initEvent()
@@ -36,4 +37,6 @@ open class BaseActivity : AppCompatActivity() {
     open fun initEvent() = Unit
 
     open fun initPresenter() = Unit
+
+    open fun beforeInit() = Unit
 }
