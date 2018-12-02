@@ -124,7 +124,7 @@ class MainPresenter(var view: MainView?) : Presenter {
     }
 
     private fun getFragment(tag: String): BaseFragment {
-        var fragment = fragmentMap[DateInfoFragment.TAG]
+        var fragment = fragmentMap[tag]
         if (fragment == null) {
             when (tag) {
                 DateInfoFragment.TAG -> {
@@ -163,6 +163,7 @@ class MainPresenter(var view: MainView?) : Presenter {
         for (pair in fragmentMap) {
             transaction.hide(pair.value)
         }
+
         transaction.commit()
     }
 
