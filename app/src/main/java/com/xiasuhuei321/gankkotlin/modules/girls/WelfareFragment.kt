@@ -53,7 +53,7 @@ class WelfareFragment : BaseFragment(), WelfareView {
 
         refreshLayout.isRefreshing = true
         refreshLayout.setOnRefreshListener {
-            if (!refreshLayout.isRefreshing)
+//            if (!refreshLayout.isRefreshing)
                 presenter.refresh()
         }
     }
