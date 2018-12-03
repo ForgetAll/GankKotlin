@@ -2,6 +2,7 @@ package com.xiasuhuei321.gankkotlin.base
 
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
+import android.view.Window
 import android.view.WindowManager
 
 /**
@@ -10,14 +11,26 @@ import android.view.WindowManager
  * e-mail:xiasuhuei321@163.com
  */
 open class BaseActivity : AppCompatActivity() {
+    // todo 提供一个初始化和恢复数据的方法
+
+    open val hideActionBar = false
+    // 这里初始化是比较理想的情况，如果需要自己在合适的时机初始化，但是想要统一写法，就屏蔽这里的初始化
+    open val initBySelf = false
 
     override fun setContentView(layoutResID: Int) {
+        if (hideActionBar) {
+            supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        }
+
         super.setContentView(layoutResID)
-        beforeInit()
         initStatusBar()
-        initView()
-        initEvent()
-        initPresenter()
+
+        if (!initBySelf) {
+            beforeInit()
+            initView()
+            initEvent()
+            initPresenter()
+        }
     }
 
     private fun initStatusBar() {

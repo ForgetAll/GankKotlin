@@ -49,6 +49,7 @@ dependencies {
     implementation "com.github.jd-alexander:LikeButton:0.2.3"
     // glide
     implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 }
 
 configurations.all {

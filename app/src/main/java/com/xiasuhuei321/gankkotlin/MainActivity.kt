@@ -12,6 +12,7 @@ import com.xiasuhuei321.gankkotlin.base.BaseActivity
 import com.xiasuhuei321.gankkotlin.base.BaseFragment
 import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.base.View
+import com.xiasuhuei321.gankkotlin.modules.girls.WelfareActivity
 import com.xiasuhuei321.gankkotlin.modules.girls.WelfareFragment
 import com.xiasuhuei321.gankkotlin.modules.infobrowser.DateInfoFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,11 +27,14 @@ import org.jetbrains.anko.startActivity
 class MainActivity : BaseActivity(), MainView {
     private val TAG = "MainActivity"
     private lateinit var presenter: MainPresenter
+    override val hideActionBar: Boolean
+        get() = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        startActivity<TestActivity>()
+        presenter.showFragment(WelfareFragment.TAG)
+        startActivity<WelfareActivity>()
     }
 
     override fun initView() {
@@ -93,11 +97,11 @@ class MainPresenter(var view: MainView?) : Presenter {
     fun drawerClick(item: MenuItem) {
         when (item.itemId) {
             R.id.welfareIt -> {
-                addFragment(WelfareFragment.TAG)
+                showFragment(WelfareFragment.TAG)
             }
 
             R.id.timeBroswerIt -> {
-                addFragment(DateInfoFragment.TAG)
+                showFragment(DateInfoFragment.TAG)
             }
 
             R.id.typeBroswerIt -> {
@@ -141,7 +145,7 @@ class MainPresenter(var view: MainView?) : Presenter {
         return fragment!!
     }
 
-    fun addFragment(tag: String) {
+    fun showFragment(tag: String) {
         view?.let {
             val manager = it.getSupportManager()
             var fragment = manager.findFragmentByTag(tag)

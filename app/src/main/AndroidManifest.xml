@@ -24,6 +24,7 @@
         </activity>
         <activity android:name=".TestActivity" />
         <activity android:name=".modules.DailyDetailActivity" />
+        <activity android:name=".modules.girls.WelfareActivity" />
     </application>
 
 </manifest>
