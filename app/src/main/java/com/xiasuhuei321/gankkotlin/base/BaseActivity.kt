@@ -1,6 +1,7 @@
 package com.xiasuhuei321.gankkotlin.base
 
 import android.graphics.Color
+import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
@@ -16,6 +17,13 @@ open class BaseActivity : AppCompatActivity() {
     open val hideActionBar = false
     // 这里初始化是比较理想的情况，如果需要自己在合适的时机初始化，但是想要统一写法，就屏蔽这里的初始化
     open val initBySelf = false
+    protected lateinit var savedBundle: Bundle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initBundle(savedInstanceState)
+        initData(savedBundle)
+    }
 
     override fun setContentView(layoutResID: Int) {
         if (hideActionBar) {
@@ -43,6 +51,30 @@ open class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
         getPresenter()?.release()
         super.onDestroy()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putBundle("savedBundle", this.savedBundle)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        initBundle(savedInstanceState)
+        // 恢复数据
+        initData(savedBundle)
+    }
+
+    private fun initBundle(savedInstanceState: Bundle?) {
+        savedBundle = if (savedInstanceState == null) {
+            intent.extras ?: Bundle()
+        } else {
+            savedInstanceState.getBundle("savedBundle")
+        }
+    }
+
+    private fun initData(savedBundle: Bundle) {
+
     }
 
     open fun initView() = Unit

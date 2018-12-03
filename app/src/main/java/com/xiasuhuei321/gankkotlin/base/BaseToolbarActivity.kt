@@ -2,6 +2,7 @@ package com.xiasuhuei321.gankkotlin.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import com.xiasuhuei321.gankkotlin.R
 import kotlinx.android.synthetic.main.activity_base_toolbar.*
 
@@ -10,6 +11,9 @@ open class BaseToolbarActivity : BaseActivity() {
         get() = true
     override val hideActionBar: Boolean
         get() = true
+
+    var total = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         super.setContentView(R.layout.activity_base_toolbar)
@@ -22,7 +26,7 @@ open class BaseToolbarActivity : BaseActivity() {
         initView()
     }
 
-    protected fun setBackBtn(){
+    protected fun setBackBtn() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         toolbar.setNavigationOnClickListener {
@@ -30,7 +34,16 @@ open class BaseToolbarActivity : BaseActivity() {
         }
     }
 
-    protected fun initToolbar(title:String){
+    protected fun initToolbar(title: String) {
         supportActionBar?.title = title
+    }
+
+    protected fun initCountTv(total: Int) {
+        countTv.visibility = View.VISIBLE
+        this.total = total
+    }
+
+    protected fun setCurrent(current: Int, total: Int = this.total) {
+        countTv.text = "${current} / ${total}"
     }
 }
