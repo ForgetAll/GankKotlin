@@ -24,6 +24,7 @@ class GirlImageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var data: List<Data> = ArrayList()
     private var notifyCount = 10
     private var currentIndex = 0
+    var onItemClick: (Int) -> Unit = {}
     var fragment: Fragment? = null
     val sizeMap = HashMap<Int, Size>()
 
@@ -70,6 +71,8 @@ class GirlImageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
         Glide.with(fragment).load(data.url).asBitmap().into(simpleTarget)
+
+        h.rootRl.setOnClickListener { onItemClick.invoke(position) }
     }
 
     private fun resizeView(position: Int, holder: ImageHolder, bitmap: Bitmap?) {

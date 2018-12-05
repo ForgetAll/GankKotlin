@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.xiasuhuei321.gankkotlin.R
@@ -11,7 +12,9 @@ import com.xiasuhuei321.gankkotlin.base.BaseFragment
 import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.data.Data
 import com.xiasuhuei321.gankkotlin.modules.girls.adapter.GirlImageAdapter
+import com.xiasuhuei321.gankkotlin.util.IntentKey
 import kotlinx.android.synthetic.main.fragment_welfare.*
+import org.jetbrains.anko.startActivity
 
 /**
  * Created by xiasuhuei321 on 2018/8/16.
@@ -67,6 +70,9 @@ class WelfareFragment : BaseFragment(), WelfareView {
             presenter.refresh()
         }
         presenter.getGirls()
+        adapter.onItemClick = {
+            presenter.lookBitImg(activity, it)
+        }
     }
 
     override fun getPresenter(): Presenter? {

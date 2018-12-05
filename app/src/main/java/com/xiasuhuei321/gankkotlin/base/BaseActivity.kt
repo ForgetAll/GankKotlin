@@ -73,7 +73,7 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    private fun initData(savedBundle: Bundle) {
+    protected open fun initData(savedBundle: Bundle) {
 
     }
 

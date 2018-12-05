@@ -1,9 +1,12 @@
 package com.xiasuhuei321.gankkotlin.modules.girls
 
+import android.app.Activity
 import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.data.Data
 import com.xiasuhuei321.gankkotlin.network.asyncUI
 import com.xiasuhuei321.gankkotlin.network.gankService
+import com.xiasuhuei321.gankkotlin.util.IntentKey
+import org.jetbrains.anko.startActivity
 import java.util.ArrayList
 
 class WelfarePresenter(var view: WelfareView?) : Presenter {
@@ -33,6 +36,11 @@ class WelfarePresenter(var view: WelfareView?) : Presenter {
             }
         }
         view?.closeRefresh()
+    }
+
+    fun lookBitImg(activity: Activity, position: Int) {
+        activity.startActivity<WelfareActivity>(IntentKey.IMG_URL_ARRAY to data.map { it.url }.toTypedArray(),
+                IntentKey.IMG_POSITION to position)
     }
 }
 
