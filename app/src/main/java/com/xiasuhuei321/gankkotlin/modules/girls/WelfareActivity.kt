@@ -9,17 +9,22 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.xiasuhuei321.gankkotlin.R
 import com.xiasuhuei321.gankkotlin.base.BaseToolbarActivity
+import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.util.IntentKey
 import kotlinx.android.synthetic.main.activity_welfare.*
 import kotlinx.android.synthetic.main.item_big_img.view.*
 
-class WelfareActivity : BaseToolbarActivity() {
+class WelfareActivity : BaseToolbarActivity(), WelfareActivityView {
+
     override val hideActionBar: Boolean
         get() = true
 
     private var position: Int = 0
-    private var data: Array<String>? = null
+    private var data: MutableList<String>? = null
     private var views = mutableListOf<View>()
+    private var pageIndex: Int = 0
+
+    private var presenter = WelfareActivityPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +33,8 @@ class WelfareActivity : BaseToolbarActivity() {
 
     override fun initData(savedBundle: Bundle) {
         position = savedBundle.getInt(IntentKey.IMG_POSITION, 0)
-        data = savedBundle.getStringArray(IntentKey.IMG_URL_ARRAY)
+        data = savedBundle.getStringArray(IntentKey.IMG_URL_ARRAY).toMutableList()
+        pageIndex = data?.size ?: 0 / 10
     }
 
     override fun initView() {
@@ -49,11 +55,23 @@ class WelfareActivity : BaseToolbarActivity() {
 
             override fun onPageSelected(position: Int) {
                 setCurrent(position + 1)
+                if (position + 1 == data?.size) {
+                    presenter.getGirlsByIndex(pageIndex)
+                    pageIndex++
+                }
             }
 
         })
 
+        data?.forEach {
+            views.add(createView(it))
+        }
+
         contentVp.currentItem = position
+    }
+
+    override fun getPresenter(): Presenter? {
+        return presenter
     }
 
     private val adapter = object : PagerAdapter() {
@@ -70,11 +88,6 @@ class WelfareActivity : BaseToolbarActivity() {
                 val v = LayoutInflater.from(this@WelfareActivity).inflate(R.layout.item_big_img, null)
                 views.add(v)
             }
-            data?.get(position)?.let {
-                Glide.with(this@WelfareActivity)
-                        .load(it)
-                        .into(views[position].imagePv)
-            }
 
             container?.addView(views[position])
             return views[position]
@@ -83,5 +96,29 @@ class WelfareActivity : BaseToolbarActivity() {
         override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
             container?.removeView(views[position])
         }
+    }
+
+    private fun createView(url: String): View {
+        return LayoutInflater.from(this@WelfareActivity).inflate(R.layout.item_big_img, null).apply {
+            data?.get(position)?.let {
+                Glide.with(this@WelfareActivity)
+                        .load(it)
+                        .into(this.imagePv)
+            }
+        }
+    }
+
+    override fun closeRefreshLayout() {
+        refreshLayout.isRefreshing = false
+    }
+
+    override fun refreshLayout() {
+        refreshLayout.isRefreshing = true
+    }
+
+    override fun addData(data: List<String>) {
+        this.data?.addAll(data)
+        adapter.notifyDataSetChanged()
+        initCountTv(this.data?.size ?: 0)
     }
 }

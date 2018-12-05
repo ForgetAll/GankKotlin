@@ -19,13 +19,7 @@ import java.util.concurrent.TimeUnit
 object GankService : ApiService by GankServer.service {
     var welfarePageIndex = 0
 
-    fun getWelfare(pageIndex: Int = -1, count: Int = 10) = getData("福利", count.toString(), if (pageIndex == -1) {
-        this.welfarePageIndex++
-        this.welfarePageIndex.toString()
-    } else {
-        this.welfarePageIndex = pageIndex
-        pageIndex.toString()
-    })
+    fun getWelfare(pageIndex: Int, count: Int = 10) = getData("福利", count.toString(), pageIndex.toString())
 
     /**
      * 时间格式 2018-08-01

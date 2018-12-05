@@ -7,16 +7,18 @@ import com.xiasuhuei321.gankkotlin.network.asyncUI
 import com.xiasuhuei321.gankkotlin.network.gankService
 import com.xiasuhuei321.gankkotlin.util.IntentKey
 import org.jetbrains.anko.startActivity
-import java.util.ArrayList
 
 class WelfarePresenter(var view: WelfareView?) : Presenter {
-    var data: MutableList<Data> = ArrayList()
+    var data: MutableList<Data> = mutableListOf()
+    var pageIndex = 0
+
     override fun release() {
         view = null
     }
 
     fun getGirls() = asyncUI {
-        val res = gankService { getWelfare() }.await().body()
+        pageIndex++
+        val res = gankService { getWelfare(pageIndex) }.await().body()
         if (res.isSuccess()) {
             res.results?.let {
                 data.addAll(it)
