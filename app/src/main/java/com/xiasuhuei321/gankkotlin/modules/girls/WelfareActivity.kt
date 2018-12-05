@@ -34,7 +34,7 @@ class WelfareActivity : BaseToolbarActivity(), WelfareActivityView {
     override fun initData(savedBundle: Bundle) {
         position = savedBundle.getInt(IntentKey.IMG_POSITION, 0)
         data = savedBundle.getStringArray(IntentKey.IMG_URL_ARRAY).toMutableList()
-        pageIndex = data?.size ?: 0 / 10
+        pageIndex = (data?.size ?: 0) / 10 + 1
     }
 
     override fun initView() {
@@ -85,7 +85,7 @@ class WelfareActivity : BaseToolbarActivity(), WelfareActivityView {
 
         override fun instantiateItem(container: ViewGroup?, position: Int): Any {
             if (views.size <= position) {
-                val v = LayoutInflater.from(this@WelfareActivity).inflate(R.layout.item_big_img, null)
+                val v = createView(data?.get(position) ?: "")
                 views.add(v)
             }
 
@@ -100,20 +100,18 @@ class WelfareActivity : BaseToolbarActivity(), WelfareActivityView {
 
     private fun createView(url: String): View {
         return LayoutInflater.from(this@WelfareActivity).inflate(R.layout.item_big_img, null).apply {
-            data?.get(position)?.let {
-                Glide.with(this@WelfareActivity)
-                        .load(it)
-                        .into(this.imagePv)
-            }
+            Glide.with(this@WelfareActivity)
+                    .load(url)
+                    .into(this.imagePv)
         }
     }
 
     override fun closeRefreshLayout() {
-        refreshLayout.isRefreshing = false
+//        refreshLayout.isRefreshing = false
     }
 
     override fun refreshLayout() {
-        refreshLayout.isRefreshing = true
+//        refreshLayout.isRefreshing = true
     }
 
     override fun addData(data: List<String>) {

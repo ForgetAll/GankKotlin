@@ -13,6 +13,7 @@ open class BaseToolbarActivity : BaseActivity() {
         get() = true
 
     var total = 0
+    var current = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +42,11 @@ open class BaseToolbarActivity : BaseActivity() {
     protected fun initCountTv(total: Int) {
         countTv.visibility = View.VISIBLE
         this.total = total
+        setCurrent(current, total)
     }
 
     protected fun setCurrent(current: Int, total: Int = this.total) {
+        this.current = current
         countTv.text = "${current} / ${total}"
     }
 }
