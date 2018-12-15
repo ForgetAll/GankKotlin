@@ -58,8 +58,8 @@ class WelfareActivity : BaseToolbarActivity(), WelfareActivityView {
                 if (position + 1 == data?.size) {
                     presenter.getGirlsByIndex(pageIndex)
                     pageIndex++
+                    }
                 }
-            }
 
         })
 

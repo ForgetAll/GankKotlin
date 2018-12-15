@@ -23,7 +23,7 @@ import org.jetbrains.anko.startActivity
  */
 class WelfareFragment : BaseFragment(), WelfareView {
     companion object {
-        val TAG = "WelfareFragment"
+        const val TAG = "WelfareFragment"
     }
 
     private val presenter = WelfarePresenter(this)

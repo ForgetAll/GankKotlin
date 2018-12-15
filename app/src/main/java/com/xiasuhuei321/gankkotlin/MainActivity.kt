@@ -34,6 +34,7 @@ class MainActivity : BaseActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         presenter.showFragment(WelfareFragment.TAG)
+        startActivity<TestActivity>()
     }
 
     override fun initView() {
