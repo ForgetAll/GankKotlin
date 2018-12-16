@@ -4,7 +4,7 @@ import com.xiasuhuei321.gankkotlin.data.Data
 import com.xiasuhuei321.gankkotlin.data.DataManager
 
 object GankDataStore {
-    val dataManager = DataManager()
+    private val dataManager = DataManager()
 
     fun initStore() {
         dataManager.initStore()

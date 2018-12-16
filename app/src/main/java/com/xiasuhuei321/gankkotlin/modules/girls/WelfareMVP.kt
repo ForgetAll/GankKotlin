@@ -28,26 +28,19 @@ class WelfarePresenter(var view: WelfareView?) : Presenter {
             view?.setData(data)
         }
 
-//        val res = gankService { getWelfare(pageIndex) }.await().body()
-//        if (res.isSuccess()) {
-//            res.results?.let {
-//                data.addAll(it)
-////                DataManager.addOrUpdateData(it)
-//                view?.setData(data)
-//            }
-//        }
         view?.closeRefresh()
     }
 
     fun refresh() = asyncUI {
-        val res = gankService { getWelfare(1) }.await().body()
-        if (res.isSuccess()) {
-            res.results?.let {
-                data.clear()
-                data.addAll(it)
-                view?.setData(data)
+        val res = gankService { getWelfare(1) }.await()
+        if (res.isSuccessful)
+            if (res.body().isSuccess()) {
+                res.body().results?.let {
+                    data.clear()
+                    data.addAll(it)
+                    view?.setData(data)
+                }
             }
-        }
         view?.closeRefresh()
     }
 
