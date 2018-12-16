@@ -1,4 +1,4 @@
-package com.xiasuhuei321.gankkotlin.modules
+package com.xiasuhuei321.gankkotlin.modules.infobrowser
 
 import android.content.Intent
 import android.os.Bundle

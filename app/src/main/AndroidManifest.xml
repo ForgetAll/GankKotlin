@@ -23,8 +23,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".TestActivity" />
-        <activity android:name=".modules.DailyDetailActivity" />
+        <activity android:name=".modules.infobrowser.DailyDetailActivity" />
         <activity android:name=".modules.girls.WelfareActivity" />
+        <activity android:name=".modules.infobrowser.DateInfoActivity" />
     </application>
 
 </manifest>

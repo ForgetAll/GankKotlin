@@ -22,8 +22,7 @@ class WelfarePresenter(var view: WelfareView?) : Presenter {
     }
 
     fun getGirls() = asyncUI {
-        pageIndex++
-        GankDataStore.requestWelfareData(pageIndex)?.let {
+        GankDataStore.requestWelfareData(++pageIndex)?.let {
             data.addAll(it)
             view?.setData(data)
         }
