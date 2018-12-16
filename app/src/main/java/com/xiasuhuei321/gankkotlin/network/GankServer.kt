@@ -17,6 +17,9 @@ import java.util.concurrent.TimeUnit
  * e-mail:xiasuhuei321@163.com
  */
 object GankService : ApiService by GankServer.service {
+    const val TIMEOUT_ERROR = 20001
+    const val NETWORK_ERROR = 20002
+
     var welfarePageIndex = 0
 
     fun getWelfare(pageIndex: Int, count: Int = 10) = getData("福利", count.toString(), pageIndex.toString())
@@ -31,7 +34,7 @@ object GankService : ApiService by GankServer.service {
 }
 
 object GankServer {
-    private val DEFAULT_TIMEOUT = 45
+    private val DEFAULT_TIMEOUT = 10
 
     private val DOMAIN = "http://gank.io/"
     private val BASE_URL = "${DOMAIN}api/"

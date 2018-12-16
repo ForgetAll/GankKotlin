@@ -32,14 +32,11 @@ class TestActivity : BaseActivity() {
         }
 
         saveData.setOnClickListener {
-            DataManager.getBoxFor(Test::class.java).put(test)
+
         }
 
         getDataBtn.setOnClickListener {
-            textTv.text = DataManager.getBoxFor(Test::class.java).query().build()
-                    .find().map { it.content }.reduce { acc, test ->
-                        "$acc \n$test"
-                    }
+
         }
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.data.Data
 import com.xiasuhuei321.gankkotlin.data.DataManager
+import com.xiasuhuei321.gankkotlin.network.GankDataStore
 import com.xiasuhuei321.gankkotlin.network.asyncUI
 import com.xiasuhuei321.gankkotlin.network.gankService
 import com.xiasuhuei321.gankkotlin.util.IntentKey
@@ -22,15 +23,19 @@ class WelfarePresenter(var view: WelfareView?) : Presenter {
 
     fun getGirls() = asyncUI {
         pageIndex++
-        XLog.i(TAG, "存储了： ${DataManager.getData().size}")
-        val res = gankService { getWelfare(pageIndex) }.await().body()
-        if (res.isSuccess()) {
-            res.results?.let {
-                data.addAll(it)
-                DataManager.updateOrAddData(it)
-                view?.setData(data)
-            }
+        GankDataStore.requestWelfareData(pageIndex)?.let {
+            data.addAll(it)
+            view?.setData(data)
         }
+
+//        val res = gankService { getWelfare(pageIndex) }.await().body()
+//        if (res.isSuccess()) {
+//            res.results?.let {
+//                data.addAll(it)
+////                DataManager.addOrUpdateData(it)
+//                view?.setData(data)
+//            }
+//        }
         view?.closeRefresh()
     }
 

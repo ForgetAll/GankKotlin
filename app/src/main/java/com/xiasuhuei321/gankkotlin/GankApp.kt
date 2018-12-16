@@ -2,6 +2,7 @@ package com.xiasuhuei321.gankkotlin
 
 import android.app.Application
 import com.xiasuhuei321.gankkotlin.data.DataManager
+import com.xiasuhuei321.gankkotlin.network.GankDataStore
 
 /**
  * Created by xiasuhuei321 on 2018/8/24.
@@ -12,6 +13,6 @@ class GankApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Global.initContext(this)
-        DataManager.initStore()
+        GankDataStore.initStore()
     }
 }
