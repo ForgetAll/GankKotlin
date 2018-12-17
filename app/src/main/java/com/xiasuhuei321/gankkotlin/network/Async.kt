@@ -64,6 +64,7 @@ fun <T> gankService(
         val error = when (e) {
             is IOException -> Response.error<GankData<T>>(GankService.TIMEOUT_ERROR, ResponseBody.create(null, "IOException 可能是读写超时"))
             is UnknownHostException -> Response.error<GankData<T>>(GankService.NETWORK_ERROR, ResponseBody.create(null, "UnknownHostException 可能是网络断开"))
+            is RuntimeException -> Response.error<GankData<T>>(GankService.UNKNOWN_ERROR, ResponseBody.create(null, "UnknownError：${e.message}"))
             else -> Response.error<GankData<T>>(1001, ResponseBody.create(null, "未处理的错误：$e"))
         }
 

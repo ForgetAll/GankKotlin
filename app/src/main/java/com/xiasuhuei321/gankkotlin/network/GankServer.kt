@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit
 object GankService : ApiService by GankServer.service {
     const val TIMEOUT_ERROR = 20001
     const val NETWORK_ERROR = 20002
+    const val UNKNOWN_ERROR = 20003
 
     var welfarePageIndex = 0
 
