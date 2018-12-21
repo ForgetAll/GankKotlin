@@ -15,6 +15,7 @@ open class BaseActivity : AppCompatActivity() {
     // todo 提供一个初始化和恢复数据的方法
 
     open val hideActionBar = false
+    open val statusBarColor = Color.parseColor("#4aa5e2")
     // 这里初始化是比较理想的情况，如果需要自己在合适的时机初始化，但是想要统一写法，就屏蔽这里的初始化
     open val initBySelf = false
     protected lateinit var savedBundle: Bundle
@@ -43,7 +44,7 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun initStatusBar() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = Color.parseColor("#4aa5e2")
+        window.statusBarColor = statusBarColor
     }
 
     open fun getPresenter(): Presenter? = null

@@ -14,6 +14,7 @@ import com.xiasuhuei321.gankkotlin.base.Presenter
 import com.xiasuhuei321.gankkotlin.base.View
 import com.xiasuhuei321.gankkotlin.modules.girls.WelfareActivity
 import com.xiasuhuei321.gankkotlin.modules.girls.WelfareFragment
+import com.xiasuhuei321.gankkotlin.modules.infobrowser.DateInfoActivity
 import com.xiasuhuei321.gankkotlin.modules.infobrowser.DateInfoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_toobar.*
@@ -34,6 +35,7 @@ class MainActivity : BaseActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         presenter.showFragment(WelfareFragment.TAG)
+        startActivity<DateInfoActivity>()
     }
 
     override fun initView() {
