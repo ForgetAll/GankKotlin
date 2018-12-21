@@ -2,6 +2,7 @@ package com.xiasuhuei321.gankkotlin.network
 
 import com.xiasuhuei321.gankkotlin.data.Data
 import com.xiasuhuei321.gankkotlin.data.DataManager
+import com.xiasuhuei321.gankkotlin.data.DataType
 
 object GankDataStore {
     private val dataManager = DataManager()
@@ -16,7 +17,7 @@ object GankDataStore {
                 this.body().results?.apply { dataManager.addOrUpdateData(this) }
             } else {
                 val start = pageIndex * 10 - 10
-                dataManager.queryData(start, start + 10)
+                dataManager.queryDataByType(start, start + 10, DataType.Welfare)
             }
         }
 

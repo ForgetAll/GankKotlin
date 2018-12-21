@@ -37,7 +37,7 @@ object GankService : ApiService by GankServer.service {
 object GankServer {
     private val DEFAULT_TIMEOUT = 10
 
-    private val DOMAIN = "http://gank.io/"
+    private val DOMAIN = "https://gank.io/"
     private val BASE_URL = "${DOMAIN}api/"
 
     private val retrofit: Retrofit

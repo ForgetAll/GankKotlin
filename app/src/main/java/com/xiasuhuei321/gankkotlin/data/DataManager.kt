@@ -33,11 +33,14 @@ class DataManager {
         })
     }
 
+    fun queryDataByType(start: Int, end: Int, dataType: DataType) = queryData(start, end, dataType)
+
+
     /**
      * 查询 [start] 到 [end] 之间的数据，左边界 [start] 包含在内，右边界 [end] 不包含在内
      */
-    fun queryData(start: Int, end: Int): List<Data> {
-        val q = query(Data::class.java).build()
+    private fun queryData(start: Int, end: Int, dataType: DataType): List<Data> {
+        val q = query(Data::class.java).equal(Data_.type, dataType.type).build()
         if (start > q.count()) return mutableListOf()
         val result = q.find()
         if (end > result.size) return result.subList(start, result.size)
@@ -45,4 +48,14 @@ class DataManager {
     }
 
     private fun <T> query(clz: Class<T>) = boxStore.boxFor(clz).query()
+
+
+}
+
+enum class DataType(val type: String) {
+    Welfare("福利"),
+    Android("Android"),
+    iOS("iOS"),
+    WebFront("前端"),
+    Other("其他")
 }
