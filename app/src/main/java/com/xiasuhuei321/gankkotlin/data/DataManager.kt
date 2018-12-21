@@ -57,5 +57,10 @@ enum class DataType(val type: String) {
     Android("Android"),
     iOS("iOS"),
     WebFront("前端"),
+    XiaJBTui("瞎推荐"),
+    App("App"),
+    Video("视频"),
+    Extra("拓展资源"),
+    OneDay("OneDay"),
     Other("其他")
 }
